@@ -1,7 +1,7 @@
 from flask import Flask, request
 
 app = Flask(__name__)
-# TODO: Switch to using a database or persistent storage
+# Stores the latest received encrypted message for this peer
 message_store = ""
 
 @app.route('/receive', methods=['POST'])
