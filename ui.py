@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import simpledialog, messagebox
-from crypto import encrypt_message, decrypt_message
 from sms import generate_otp, send_otp_via_sms
+from client import send_secure_message_to_peer, read_secure_message_from_local
 import requests
 import subprocess
 import sys
@@ -79,12 +79,11 @@ class SecureMessengerApp:
         send_otp_via_sms(phone, otp)
 
         try:
-            encrypted = encrypt_message(message, otp)
-            response = requests.post(f"http://{peer_ip}:5000/receive", json={'encrypted_msg': encrypted})
-            if response.status_code == 200:
+            status = send_secure_message_to_peer(message, otp, peer_ip)
+            if status == 200:
                 messagebox.showinfo("Success", "Encrypted message sent and OTP delivered!")
             else:
-                messagebox.showerror("Error", f"Failed to send message. Status code: {response.status_code}")
+                messagebox.showerror("Error", f"Failed to send message. Status code: {status}")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to send message: {e}")
 
@@ -93,13 +92,10 @@ class SecureMessengerApp:
         if not otp:
             return
         try:
-            # Always fetch from local server
-            response = requests.get("http://127.0.0.1:5000/get_message")
-            encrypted_msg = response.json().get('encrypted_msg', '')
-            if not encrypted_msg:
+            decrypted_msg = read_secure_message_from_local(otp)
+            if decrypted_msg is None:
                 messagebox.showerror("Error", "No message received yet.")
                 return
-            decrypted_msg = decrypt_message(encrypted_msg, otp)
             messagebox.showinfo("Decrypted Message", decrypted_msg)
         except Exception as e:
             messagebox.showerror("Error", f"Failed to decrypt: {e}")
