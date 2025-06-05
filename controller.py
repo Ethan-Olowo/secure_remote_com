@@ -5,6 +5,7 @@ from sms import generate_otp, send_otp_via_sms
 from client import send_secure_message_to_peer, read_secure_message_from_local
 from PyQt6.QtWidgets import QMessageBox
 import subprocess, sys, os, signal
+from network_scan import scan_network_for_servers
 
 class SecureMessengerController:
     def __init__(self, main_window):
@@ -14,6 +15,11 @@ class SecureMessengerController:
         self.server_process = None
 
     def show_send_page(self):
+        # Scan for servers and update dropdown before showing the page
+        ip_list = scan_network_for_servers()
+        if not ip_list:
+            ip_list = ["No devices found"]
+        self.send_page.set_ip_choices(ip_list)
         self.main_window.set_central_widget(self.send_page)
 
     def show_receive_page(self):
@@ -46,9 +52,9 @@ class SecureMessengerController:
             if msg:
                 QMessageBox.information(self.main_window, "Decrypted", msg)
             else:
-                QMessageBox.warning(self.main_window, "Failed", "No message or bad OTP.")
+                Exception("No message or bad OTP.")
         except Exception as e:
-            QMessageBox.critical(self.main_window, "Error", str(e))
+            QMessageBox.critical(self.main_window, "Error", "Failed to Decrypt\n"+str(e))
 
     def start_server(self):
         if self.server_process is None:

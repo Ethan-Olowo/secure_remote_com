@@ -1,7 +1,7 @@
 from flask import Flask, request
 
 app = Flask(__name__)
-# Stores the latest received encrypted message for this peer
+#TODO implement a more robust storage solution
 message_store = ""
 
 @app.route('/receive', methods=['POST'])
