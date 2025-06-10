@@ -15,11 +15,10 @@ class SecureMessengerController:
         self.server_process = None
 
     def show_send_page(self):
-        # Scan for servers and update dropdown before showing the page
-        ip_list = scan_network_for_servers()
-        if not ip_list:
-            ip_list = ["No devices found"]
-        self.send_page.set_ip_choices(ip_list)
+        device_list = scan_network_for_servers()
+        if not device_list:
+            device_list = [{'device_name': 'No devices found', 'ip': ''}]
+        self.send_page.set_ip_choices(device_list)
         self.main_window.set_central_widget(self.send_page)
 
     def show_receive_page(self):

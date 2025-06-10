@@ -1,4 +1,5 @@
 from flask import Flask, request
+import socket
 
 app = Flask(__name__)
 #TODO implement a more robust storage solution
@@ -14,6 +15,10 @@ def receive():
 @app.route('/get_message', methods=['GET'])
 def get_message():
     return {'encrypted_msg': message_store}, 200
+
+@app.route('/whoami', methods=['GET'])
+def whoami():
+    return {'device_name': socket.gethostname()}, 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

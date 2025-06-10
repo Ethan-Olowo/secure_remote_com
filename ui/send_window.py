@@ -23,9 +23,18 @@ class SendMessagePage(QWidget):
 
         self.setLayout(layout)
 
-    def get_inputs(self):
-        return self.message_input.text(), self.phone_input.text(), self.ip_dropdown.currentText()
-
-    def set_ip_choices(self, ip_list):
+    def set_ip_choices(self, device_list):
         self.ip_dropdown.clear()
-        self.ip_dropdown.addItems(ip_list)
+        self.device_map = {}  # device_name -> ip
+        for entry in device_list:
+            name = entry['device_name']
+            ip = entry['ip']
+            self.device_map[name] = ip
+            self.ip_dropdown.addItem(name)
+
+    def get_inputs(self):
+        message = self.message_input.text()
+        phone = self.phone_input.text()
+        device_name = self.ip_dropdown.currentText()
+        ip = self.device_map.get(device_name, device_name)
+        return message, phone, ip
