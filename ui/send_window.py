@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QComboBox
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QComboBox, QMessageBox
+import re
 
 class SendMessagePage(QWidget):
     def __init__(self, send_callback):
@@ -18,9 +19,10 @@ class SendMessagePage(QWidget):
         layout.addWidget(self.ip_dropdown)
 
         send_button = QPushButton("Send Secure Message")
-        send_button.clicked.connect(send_callback)
+        send_button.clicked.connect(self.validate_and_send)
         layout.addWidget(send_button)
 
+        self.send_callback = send_callback
         self.setLayout(layout)
 
     def set_ip_choices(self, device_list):
@@ -38,3 +40,12 @@ class SendMessagePage(QWidget):
         device_name = self.ip_dropdown.currentText()
         ip = self.device_map.get(device_name, device_name)
         return message, phone, ip
+
+    def validate_and_send(self):
+        phone = self.phone_input.text().strip()
+        # Example: Kenyan phone number validation (starts with 07 or +2547 and 10/13 digits)
+        pattern = r"^(07\d{8}|(\+2547\d{8}))$"
+        if not re.match(pattern, phone):
+            QMessageBox.warning(self, "Invalid Phone Number", "Please enter a valid Kenyan phone number (e.g., 0712345678 or +254712345678).")
+            return
+        self.send_callback()
