@@ -2,11 +2,11 @@ from ui.main_window import MainWindow
 from ui.send_window import SendMessagePage
 from ui.receive_window import ReceiveMessagePage
 from sms import generate_otp, send_otp_via_sms
-from client import send_secure_message_to_peer, read_secure_message_from_local
+from networking.client import send_secure_message_to_peer, read_secure_message_from_local
 from crypto import encrypt_message, decrypt_message
 from PyQt6.QtWidgets import QMessageBox
 import subprocess, sys, os, signal
-from network_scan import scan_network_for_servers
+from networking.network_scan import scan_network_for_servers
 
 class SecureMessengerController:
     def __init__(self, main_window):
