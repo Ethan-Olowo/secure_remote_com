@@ -14,7 +14,7 @@ class AboutPage(QWidget):
         info = QLabel(
             "Secure Messenger\n\n"
             "A simple, secure messaging application for sending and receiving encrypted messages.\n"
-            "Developed as a project for Strathmore University.\n\n"
+            "Developed as a project for BBT4102 Cryptography and Network Security.\n\n"
             "By:\n"
             "152894 Ethan Olowo\n"
             "152613 Abdalla Hafsa Fuad\n"

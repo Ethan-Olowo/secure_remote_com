@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit
 
 class ReceiveMessagePage(QWidget):
     def __init__(self, decrypt_callback):
@@ -11,6 +11,10 @@ class ReceiveMessagePage(QWidget):
         self.otp_input = QLineEdit()
         layout.addWidget(self.otp_input)
 
+        layout.addWidget(QLabel("Paste Encrypted Message:"))
+        self.encrypted_input = QTextEdit()
+        layout.addWidget(self.encrypted_input)
+
         decrypt_button = QPushButton("Decrypt Message")
         decrypt_button.clicked.connect(decrypt_callback)
         layout.addWidget(decrypt_button)
@@ -19,3 +23,6 @@ class ReceiveMessagePage(QWidget):
 
     def get_otp(self):
         return self.otp_input.text()
+
+    def get_encrypted_message(self):
+        return self.encrypted_input.toPlainText().strip()
